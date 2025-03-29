@@ -12,6 +12,12 @@ async def start(update, context):
 async def help_command(update, context):
     await update.message.reply_text("🤖 I can chat with you! Try asking me about Rewarzo rewards or just say hi!")
 
+# Set Webhook
+WEBHOOK_URL = "https://rewarzorewardbot.onrender.com>"  # Replace with your Render URL
+updater.bot.set_webhook(url=WEBHOOK_URL)
+updater.start_webhook(listen="0.0.0.0", port=8000, url_path=TOKEN)
+
+
 # Function for intelligent replies
 async def handle_message(update, context):
     text = update.message.text.lower()
