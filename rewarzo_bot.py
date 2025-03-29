@@ -1,53 +1,24 @@
-from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters
-import random
+from telegram.ext import ApplicationBuilder, CommandHandler
+import os
 
-# Replace with your actual BotFather Token
-TOKEN = "7541385041:AAGdRa3BntxsUB_8sOnybUV2zAUeNMpE7xM"
+# Get the bot token from environment variables
+TOKEN = os.getenv("BOT_TOKEN")
+WEBHOOK_URL = "https://rewarzorewardbot.onrender.com"  # Replace with your actual Render URL
 
-# Function to handle /start command
+# Define the /start command handler
 async def start(update, context):
-    await update.message.reply_text("🎉 Welcome to Rewarzo! I'm your friendly chatbot. Ask me anything!")
+    await update.message.reply_text("🤖 Rewarzo Bot is now online!")
 
-# Function to handle /help command
-async def help_command(update, context):
-    await update.message.reply_text("🤖 I can chat with you! Try asking me about Rewarzo rewards or just say hi!")
-
-# Set Webhook
-WEBHOOK_URL = "https://rewarzorewardbot.onrender.com>"  # Replace with your Render URL
-updater.bot.set_webhook(url=WEBHOOK_URL)
-updater.start_webhook(listen="0.0.0.0", port=8000, url_path=TOKEN)
-
-
-# Function for intelligent replies
-async def handle_message(update, context):
-    text = update.message.text.lower()
-
-    # Define possible responses
-    responses = {
-        "hi": ["Hey there! 👋", "Hello! How can I help you today?", "Hi! 😊"],
-        "hello": ["Hello! 😊", "Hey! Need help with Rewarzo?", "Hi there! How's it going?"],
-        "rewards": ["You can earn rewards by playing games, watching videos, and completing offers! 🎮🎁"],
-        "how are you": ["I'm just a bot, but I'm feeling chatty today! 😄", "Doing great! How about you?"],
-        "bye": ["Goodbye! See you soon! 👋", "Take care! Come back anytime! 😊"],
-    }
-
-    # Check if message matches any key
-    for key, replies in responses.items():
-        if key in text:
-            await update.message.reply_text(random.choice(replies))
-            return
-
-    # Default response if no keyword matches
-    await update.message.reply_text("I didn't quite get that. 🤔 Try asking about rewards or just say hi!")
-
-# Create the Application
+# Create the bot application
 app = ApplicationBuilder().token(TOKEN).build()
 
 # Add command handlers
 app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("help", help_command))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-# Run the bot
-print("🤖 Rewarzo Chatbot is running...")
-app.run_polling()
+# Set the webhook
+app.run_webhook(
+    listen="0.0.0.0",
+    port=8000,
+    url_path=TOKEN,
+    webhook_url=WEBHOOK_URL,
+)
